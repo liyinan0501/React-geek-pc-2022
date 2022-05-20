@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Login from './pages/Login/index'
-import Home from './pages/Layout/index'
-import NotFound from './pages/404/index'
+import Login from 'pages/Login/index'
+import Home from 'pages/Layout/index'
+import NotFound from 'pages/404/index'
 
 function App() {
   return (
