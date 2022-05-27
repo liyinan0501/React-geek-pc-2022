@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, Form, Input, Button, Checkbox } from 'antd'
 import './index.scss'
 import logo from 'assets/logo.png'
+import request from 'utils/request'
 
 export default class Login extends Component {
   render() {
@@ -14,8 +15,8 @@ export default class Login extends Component {
             validateTrigger={['onBlur']}
             onFinish={this.onFinish}
             initialValues={{
-              mobile: '13946003700',
-              code: '123456',
+              mobile: '13911111111',
+              code: '246810',
               agree: true,
             }}
           >
@@ -80,7 +81,15 @@ export default class Login extends Component {
       </div>
     )
   }
-  onFinish = (values) => {
-    console.log(values)
+  onFinish = async ({ mobile, code }) => {
+    const res = await request({
+      method: 'post',
+      url: '/authorizations',
+      data: {
+        mobile,
+        code,
+      },
+    })
+    console.log(res)
   }
 }
