@@ -53,8 +53,12 @@ export default class Login extends Component {
               name="agree"
               rules={[
                 {
-                  required: true,
-                  message: 'Please agree',
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error('Please agree terms and conditions')
+                        ),
                 },
               ]}
             >
