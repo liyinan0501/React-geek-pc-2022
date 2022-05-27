@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Login from 'pages/Login/index'
 import Home from 'pages/Layout/index'
 import NotFound from 'pages/404/index'
@@ -11,12 +11,11 @@ function App() {
         <Link to="home">Home</Link> */}
 
         {/* Routes */}
-        <Routes>
-          <Route index element={<Home />}></Route>
-          <Route path="login" element={<Login />}></Route>
-          <Route path="home" element={<Home />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
+        <Switch>
+          <Route path="/home" component={Home}></Route>
+          <Route path="/login" component={Login}></Route>
+          <Route path="*" component={NotFound}></Route>
+        </Switch>
       </div>
     </Router>
   )

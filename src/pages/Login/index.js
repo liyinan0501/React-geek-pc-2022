@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Card, Form, Input, Button, Checkbox } from 'antd'
 import './index.scss'
 import logo from 'assets/logo.png'
-import request from 'utils/request'
+import { login } from 'api/user'
 
 export default class Login extends Component {
   render() {
@@ -81,15 +81,21 @@ export default class Login extends Component {
       </div>
     )
   }
+
   onFinish = async ({ mobile, code }) => {
-    const res = await request({
-      method: 'post',
-      url: '/authorizations',
-      data: {
-        mobile,
-        code,
-      },
-    })
-    console.log(res)
+    try {
+      const res = await login(mobile, code)
+      console.log(res)
+      // Login succeeds
+      // 1. save token
+      localStorage.setItem('token', res.data.token)
+      // 2. Jump to front page
+      this.props.history.push('/home')
+      // 3. message
+      alert('Login Succeeds!')
+    } catch (error) {
+      // console.dir(error)
+      alert(error.response.data.message)
+    }
   }
 }
