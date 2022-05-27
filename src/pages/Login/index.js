@@ -13,6 +13,11 @@ export default class Login extends Component {
             size="large"
             validateTrigger={['onBlur']}
             onFinish={this.onFinish}
+            initialValues={{
+              mobile: '13946003700',
+              code: '123456',
+              agree: true,
+            }}
           >
             {/* validateTrigger={['onChange', 'onBlur']}> */}
             <Form.Item
