@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Card, Form, Input, Button, Checkbox, message } from 'antd'
-import './index.scss'
+import styles from './index.module.scss'
 import logo from 'assets/logo.png'
 import { login } from 'api/user'
+import { setToken } from 'utils/storage'
+// console.log(styles)
 
 export default class Login extends Component {
   state = {
@@ -10,7 +12,7 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <div className="login">
+      <div className={styles.login}>
         <Card className="login-container">
           <img src={logo} alt="" className="login-logo" />
           <Form
@@ -96,12 +98,12 @@ export default class Login extends Component {
     })
     try {
       const res = await login(mobile, code)
-      console.log(res)
+      // console.log(res)
       // Login succeeds
       // 3. message
       message.success('Login Succeeds!', 1, () => {
         // 1. save token
-        localStorage.setItem('token', res.data.token)
+        setToken(res.data.token)
         // 2. Jump to front page
         this.props.history.push('/home')
       })

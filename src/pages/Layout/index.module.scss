@@ -1,0 +1,70 @@
+// .aa {
+//   color: red;
+//   .bb {
+//     color: pink;
+//   }
+//   :global {
+//     .iconfont {
+//       color: red;
+//     }
+//     .ant-pagination-item-active {
+//       border-color: red;
+//       a {
+//         color: red;
+//       }
+//     }
+//   }
+// }
+/* module 不会更改
+:global(.iconfont) {
+  color: red;
+}
+
+:global(.ant-pagination-item-active) {
+  border-color: red;
+}
+
+:global(.ant-pagination-item-active) a {
+  color: red;
+} */
+
+.layout {
+  height: 100vh;
+  :global {
+    .ant-layout {
+      height: 100%;
+    }
+    .ant-layout-header {
+      padding: 0;
+      position: relative;
+    }
+    .logo {
+      float: left;
+      width: 200px;
+      height: 60px;
+      margin: 2px 0;
+      background: url(~assets/logo.png);
+      background-size: cover;
+    }
+    .profile {
+      color: #fff;
+      font-weight: 700;
+      position: absolute;
+      right: 20px;
+      // span 的兄弟
+      // span:first-child
+      span + span {
+        margin-left: 20px;
+        cursor: pointer;
+      }
+    }
+    .ant-row-rtl .logo {
+      float: right;
+      margin: 16px 0 16px 24px;
+    }
+
+    .site-layout-background {
+      background: #fff;
+    }
+  }
+}
