@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import { Card, Form, Input, Button, Checkbox } from 'antd'
+import { Card, Form, Input, Button, Checkbox, message } from 'antd'
 import './index.scss'
 import logo from 'assets/logo.png'
 import { login } from 'api/user'
 
 export default class Login extends Component {
+  state = {
+    loading: false,
+  }
   render() {
     return (
       <div className="login">
@@ -72,7 +75,12 @@ export default class Login extends Component {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={this.state.loading}
+              >
                 Login
               </Button>
             </Form.Item>
@@ -83,19 +91,28 @@ export default class Login extends Component {
   }
 
   onFinish = async ({ mobile, code }) => {
+    this.setState({
+      loading: true,
+    })
     try {
       const res = await login(mobile, code)
       console.log(res)
       // Login succeeds
-      // 1. save token
-      localStorage.setItem('token', res.data.token)
-      // 2. Jump to front page
-      this.props.history.push('/home')
       // 3. message
-      alert('Login Succeeds!')
+      message.success('Login Succeeds!', 1, () => {
+        // 1. save token
+        localStorage.setItem('token', res.data.token)
+        // 2. Jump to front page
+        this.props.history.push('/home')
+      })
+      // alert('Login Succeeds!')
     } catch (error) {
       // console.dir(error)
-      alert(error.response.data.message)
+      message.warning(error.response.data.message, 1, function () {
+        this.setState({
+          loading: false,
+        })
+      })
     }
   }
 }
