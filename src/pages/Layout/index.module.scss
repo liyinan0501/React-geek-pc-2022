@@ -1,36 +1,7 @@
-// .aa {
-//   color: red;
-//   .bb {
-//     color: pink;
-//   }
-//   :global {
-//     .iconfont {
-//       color: red;
-//     }
-//     .ant-pagination-item-active {
-//       border-color: red;
-//       a {
-//         color: red;
-//       }
-//     }
-//   }
-// }
-/* module 不会更改
-:global(.iconfont) {
-  color: red;
-}
-
-:global(.ant-pagination-item-active) {
-  border-color: red;
-}
-
-:global(.ant-pagination-item-active) a {
-  color: red;
-} */
-
 .layout {
   height: 100vh;
   :global {
+    //在 global 中，所以，此处的类名不会被 CSSModules 处理改掉。
     .ant-layout {
       height: 100%;
     }

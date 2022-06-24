@@ -4,7 +4,6 @@ import styles from './index.module.scss'
 import logo from 'assets/logo.png'
 import { login } from 'api/user'
 import { setToken } from 'utils/storage'
-// console.log(styles)
 
 export default class Login extends Component {
   state = {
@@ -98,7 +97,6 @@ export default class Login extends Component {
     })
     try {
       const res = await login(mobile, code)
-      // console.log(res)
       // Login succeeds
       // 3. message
       message.success('Login Succeeds!', 1, () => {
