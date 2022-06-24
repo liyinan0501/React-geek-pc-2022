@@ -22,8 +22,8 @@
       font-weight: 700;
       position: absolute;
       right: 20px;
-      // span 的兄弟
       // span:first-child
+      // span 的兄弟
       span + span {
         margin-left: 20px;
         cursor: pointer;
