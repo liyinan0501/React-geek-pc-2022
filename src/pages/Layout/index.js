@@ -12,12 +12,16 @@ import Dashboard from 'pages/Dashboard'
 import ContentControl from 'pages/ContentControl'
 import Post from 'pages/Post'
 import { removeToken } from 'utils/storage'
+import { getUserProfile } from 'api/user'
 const { Header, Content, Sider } = Layout
 
 // css module need in css file using lowerCamelCase naming, do not use - dash sign
 // console.log(styles)
 
 export default class LayoutComponent extends Component {
+  state = {
+    profile: {},
+  }
   render() {
     return (
       <div className={styles.layout}>
@@ -25,7 +29,7 @@ export default class LayoutComponent extends Component {
           <Header className="header">
             <div className="logo" />
             <div className="profile">
-              <span>User</span>
+              <span>{this.state.profile.name}</span>
               <span>
                 <Popconfirm
                   title="Are you sure to logout?"
@@ -44,19 +48,25 @@ export default class LayoutComponent extends Component {
               <Menu
                 theme="dark"
                 mode="inline"
-                defaultSelectedKeys={['1']}
+                defaultSelectedKeys={this.props.location.pathname}
                 style={{
                   height: '100%',
                   borderRight: 0,
                 }}
               >
-                <Menu.Item key="1" icon={<HomeOutlined></HomeOutlined>}>
+                <Menu.Item key="/home" icon={<HomeOutlined></HomeOutlined>}>
                   <Link to="/home">Dashboard</Link>
                 </Menu.Item>
-                <Menu.Item key="2" icon={<DiffOutlined></DiffOutlined>}>
+                <Menu.Item
+                  key="/home/contentcontrol"
+                  icon={<DiffOutlined></DiffOutlined>}
+                >
                   <Link to="/home/contentcontrol">Content Control</Link>
                 </Menu.Item>
-                <Menu.Item key="3" icon={<EditOutlined></EditOutlined>}>
+                <Menu.Item
+                  key="/home/post"
+                  icon={<EditOutlined></EditOutlined>}
+                >
                   <Link to="/home/post">Post</Link>
                 </Menu.Item>
               </Menu>
@@ -78,6 +88,14 @@ export default class LayoutComponent extends Component {
       </div>
     )
   }
+
+  async componentDidMount() {
+    const res = await getUserProfile()
+    this.setState({
+      profile: res.data,
+    })
+  }
+
   onConfirm = () => {
     // console.log('logout')
     removeToken()

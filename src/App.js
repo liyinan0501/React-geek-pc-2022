@@ -1,12 +1,14 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import Login from 'pages/Login/index'
 import Home from 'pages/Layout/index'
 import NotFound from 'pages/404/index'
 import AuthRoute from 'components/AuthRoute'
 
+import history from 'utils/history'
+
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <div className="App">
         {/* <Link to="login">Login</Link>
         <Link to="home">Home</Link> */}
