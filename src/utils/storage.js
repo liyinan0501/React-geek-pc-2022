@@ -1,4 +1,4 @@
-// encapsulate all of localstorage actions
+// encapsulate all of localStorage actions
 const TOKEN_KEY = 'token-geek-pc-2022'
 
 /**

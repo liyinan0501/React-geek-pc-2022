@@ -11,11 +11,20 @@ export default class AuthRoute extends Component {
     return (
       <Route
         {...rest}
-        render={(props) => {
+        render={(routeProps) => {
           if (hasToken()) {
-            return <Component {...props}></Component>
+            return <Component {...routeProps}></Component>
           } else {
-            return <Redirect to="/login"></Redirect>
+            return (
+              <Redirect
+                to={{
+                  pathname: '/login',
+                  state: {
+                    from: routeProps.location.pathname,
+                  },
+                }}
+              ></Redirect>
+            )
             // props.history.push('/login')
           }
         }}

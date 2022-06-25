@@ -103,7 +103,12 @@ export default class Login extends Component {
         // 1. save token
         setToken(res.data.token)
         // 2. Jump to front page
-        this.props.history.push('/home')
+        const { state } = this.props.location
+        if (state) {
+          this.props.history.push(state.from)
+        } else {
+          this.props.history.push('/home')
+        }
       })
       // alert('Login Succeeds!')
     } catch (error) {
