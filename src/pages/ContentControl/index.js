@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { ArticleStatus } from 'api/constants'
 import { getChannels } from 'api/channel'
 import { getArticles } from 'api/article'
+import defaultImg from 'assets/error.png'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
@@ -21,8 +22,26 @@ const { RangePicker } = DatePicker
 export default class ContentControl extends Component {
   columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: 'Cover',
+      render: (data) => {
+        if (data.cover.type === 0) {
+          return (
+            <img
+              src={defaultImg}
+              alt=""
+              style={{ width: 200, height: 120, objectFit: 'cover' }}
+            />
+          )
+        } else {
+          return (
+            <img
+              src={data.cover.images[0]}
+              alt=""
+              style={{ width: 200, height: 120, objectFit: 'cover' }}
+            ></img>
+          )
+        }
+      },
     },
     {
       title: 'Title',
@@ -34,47 +53,22 @@ export default class ContentControl extends Component {
     },
     {
       title: 'Publish date',
-      dataIndex: 'tags',
+      dataIndex: 'pubdate',
     },
     {
       title: 'Views',
-      dataIndex: 'tags',
+      dataIndex: 'read_count',
     },
     {
       title: 'Comments',
-      dataIndex: 'tags',
+      dataIndex: 'comment_count',
     },
     {
       title: 'Likes',
-      dataIndex: 'tags',
+      dataIndex: 'like_count',
     },
     {
       title: 'Action',
-      dataIndex: 'tags',
-    },
-  ]
-
-  data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
     },
   ]
 
@@ -84,6 +78,7 @@ export default class ContentControl extends Component {
   }
 
   render() {
+    const { total_count, results } = this.state.articles
     return (
       <div className={styles.root}>
         <Card
@@ -130,8 +125,8 @@ export default class ContentControl extends Component {
             </Form.Item>
           </Form>
         </Card>
-        <Card title={`Total xxx results:`}>
-          <Table columns={this.columns} dataSource={this.data} />
+        <Card title={`Total ${total_count} results:`}>
+          <Table columns={this.columns} dataSource={results} rowKey="id" />
         </Card>
       </div>
     )
