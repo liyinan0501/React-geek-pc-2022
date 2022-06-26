@@ -6,7 +6,6 @@ import {
   Form,
   Radio,
   Button,
-  Select,
   DatePicker,
   Table,
   Tag,
@@ -16,7 +15,6 @@ import {
 } from 'antd'
 import { Link } from 'react-router-dom'
 import { ArticleStatus } from 'api/constants'
-import { getChannels } from 'api/channel'
 import { getArticles, delArticle } from 'api/article'
 import defaultImg from 'assets/error.png'
 import {
@@ -24,8 +22,8 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons'
+import Channel from 'components/Channel'
 
-const { Option } = Select
 const { RangePicker } = DatePicker
 const { confirm } = Modal
 
@@ -106,7 +104,6 @@ export default class ContentControl extends Component {
   }
 
   state = {
-    channels: [],
     articles: {},
   }
 
@@ -136,13 +133,7 @@ export default class ContentControl extends Component {
             </Form.Item>
 
             <Form.Item label="Channel" name="channel_id" labelCol={{ span: 2 }}>
-              <Select placeholder="Select" style={{ width: 120 }}>
-                {this.state.channels.map((item) => (
-                  <Option key={item.id} value={item.id}>
-                    {item.name}
-                  </Option>
-                ))}
-              </Select>
+              <Channel></Channel>
             </Form.Item>
 
             <Form.Item label="Date" name="date" labelCol={{ span: 2 }}>
@@ -195,15 +186,7 @@ export default class ContentControl extends Component {
   }
 
   async componentDidMount() {
-    this.getChannelList()
     this.getArticleList()
-  }
-
-  async getChannelList() {
-    const res = await getChannels()
-    this.setState({
-      channels: res.data.channels,
-    })
   }
 
   async getArticleList() {

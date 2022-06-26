@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { Card, Breadcrumb, Form, Button, Space, Input } from 'antd'
 import { Link } from 'react-router-dom'
+import Channel from 'components/Channel'
 
 export default class Post extends Component {
+  state = {
+    channels: [],
+  }
   render() {
     return (
       <div>
@@ -21,6 +25,7 @@ export default class Post extends Component {
             size="large"
             onFinish={this.onFinish}
             validateTrigger={['onBlur', 'onChange']}
+            initialValues={{}}
           >
             <Form.Item
               label="Title"
@@ -37,9 +42,20 @@ export default class Post extends Component {
                 placeholder="Input title of the article"
               ></Input>
             </Form.Item>
-            <Form.Item label="Channel" name="channel"></Form.Item>
-            <Form.Item label="Cover" name="cover"></Form.Item>
-            <Form.Item label="Content" name="content"></Form.Item>
+            <Form.Item
+              label="Channel"
+              name="channel_id"
+              rules={[
+                {
+                  required: true,
+                  message: 'Select a channel',
+                },
+              ]}
+            >
+              <Channel></Channel>
+            </Form.Item>
+            <Form.Item label="Cover"></Form.Item>
+            <Form.Item label="Content"></Form.Item>
             {/* 距离左边偏移4 */}
             <Form.Item wrapperCol={{ offset: 4 }}>
               <Space>
