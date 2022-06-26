@@ -9,6 +9,7 @@ import {
   Select,
   DatePicker,
   Table,
+  Tag,
 } from 'antd'
 import { Link } from 'react-router-dom'
 import { ArticleStatus } from 'api/constants'
@@ -50,6 +51,10 @@ export default class ContentControl extends Component {
     {
       title: 'Status',
       dataIndex: 'status',
+      render: (status) => {
+        const obj = ArticleStatus.find((item) => item.id === status)
+        return <Tag color={obj.color}>{obj.name}</Tag>
+      },
     },
     {
       title: 'Publish date',
