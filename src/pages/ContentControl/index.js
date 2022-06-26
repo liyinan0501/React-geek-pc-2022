@@ -10,12 +10,14 @@ import {
   DatePicker,
   Table,
   Tag,
+  Space,
 } from 'antd'
 import { Link } from 'react-router-dom'
 import { ArticleStatus } from 'api/constants'
 import { getChannels } from 'api/channel'
 import { getArticles } from 'api/article'
 import defaultImg from 'assets/error.png'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
@@ -74,6 +76,19 @@ export default class ContentControl extends Component {
     },
     {
       title: 'Action',
+      render: () => {
+        return (
+          <Space>
+            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<DeleteOutlined />}
+              danger
+            />
+          </Space>
+        )
+      },
     },
   ]
 
