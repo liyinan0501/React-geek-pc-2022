@@ -92,13 +92,18 @@ export default class ContentControl extends Component {
     },
   ]
 
+  reqParams = {
+    page: 1,
+    per_page: 10,
+  }
+
   state = {
     channels: [],
     articles: {},
   }
 
   render() {
-    const { total_count, results } = this.state.articles
+    const { total_count, results, per_page, page } = this.state.articles
     return (
       <div className={styles.root}>
         <Card
@@ -146,10 +151,27 @@ export default class ContentControl extends Component {
           </Form>
         </Card>
         <Card title={`Total ${total_count} results:`}>
-          <Table columns={this.columns} dataSource={results} rowKey="id" />
+          <Table
+            columns={this.columns}
+            dataSource={results}
+            rowKey="id"
+            pagination={{
+              position: ['bottomCenter'],
+              total: total_count,
+              pageSize: per_page,
+              current: page,
+              onChange: this.onChange,
+            }}
+          />
         </Card>
       </div>
     )
+  }
+
+  onChange = (page, pageSize) => {
+    this.reqParams.page = page
+    this.reqParams.per_page = pageSize
+    this.getArticleList()
   }
 
   async componentDidMount() {
@@ -165,7 +187,7 @@ export default class ContentControl extends Component {
   }
 
   async getArticleList() {
-    const res = await getArticles()
+    const res = await getArticles(this.reqParams)
     this.setState({
       articles: res.data,
     })
