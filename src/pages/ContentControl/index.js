@@ -11,16 +11,23 @@ import {
   Table,
   Tag,
   Space,
+  Modal,
+  message,
 } from 'antd'
 import { Link } from 'react-router-dom'
 import { ArticleStatus } from 'api/constants'
 import { getChannels } from 'api/channel'
-import { getArticles } from 'api/article'
+import { getArticles, delArticle } from 'api/article'
 import defaultImg from 'assets/error.png'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import {
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
+const { confirm } = Modal
 
 export default class ContentControl extends Component {
   columns = [
@@ -76,7 +83,7 @@ export default class ContentControl extends Component {
     },
     {
       title: 'Action',
-      render: () => {
+      render: (data) => {
         return (
           <Space>
             <Button type="primary" shape="circle" icon={<EditOutlined />} />
@@ -85,6 +92,7 @@ export default class ContentControl extends Component {
               shape="circle"
               icon={<DeleteOutlined />}
               danger
+              onClick={() => this.handleDelete(data.id)}
             />
           </Space>
         )
@@ -112,14 +120,12 @@ export default class ContentControl extends Component {
               <Breadcrumb.Item>
                 <Link to="/home">Home</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <a href="#/">Content Control</a>
-              </Breadcrumb.Item>
+              <Breadcrumb.Item>Content Control</Breadcrumb.Item>
             </Breadcrumb>
           }
         >
           <Form initialValues={{ status: -1 }} onFinish={this.onFinish}>
-            <Form.Item label="Status" name="status">
+            <Form.Item label="Status" name="status" labelCol={{ span: 2 }}>
               <Radio.Group>
                 {ArticleStatus.map((item) => (
                   <Radio key={item.id} value={item.id}>
@@ -129,7 +135,7 @@ export default class ContentControl extends Component {
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item label="Channel" name="channel_id">
+            <Form.Item label="Channel" name="channel_id" labelCol={{ span: 2 }}>
               <Select placeholder="Select" style={{ width: 120 }}>
                 {this.state.channels.map((item) => (
                   <Option key={item.id} value={item.id}>
@@ -139,11 +145,11 @@ export default class ContentControl extends Component {
               </Select>
             </Form.Item>
 
-            <Form.Item label="Date" name="date">
+            <Form.Item label="Date" name="date" labelCol={{ span: 2 }}>
               <RangePicker />
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item wrapperCol={{ offset: 2 }}>
               <Button type="primary" htmlType="submit">
                 Filter
               </Button>
@@ -166,6 +172,20 @@ export default class ContentControl extends Component {
         </Card>
       </div>
     )
+  }
+
+  handleDelete = (id) => {
+    confirm({
+      title: 'Do you want to delete this article?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'When clicked the OK button, this article will be deleted!',
+
+      onOk: async () => {
+        await delArticle(id)
+        this.getArticleList()
+        message.success('Delete succeeds!')
+      },
+    })
   }
 
   onChange = (page, pageSize) => {
@@ -193,7 +213,32 @@ export default class ContentControl extends Component {
     })
   }
 
-  onFinish = (values) => {
-    console.log(values)
+  onFinish = ({ status, channel_id, date }) => {
+    if (status !== -1) {
+      this.reqParams.status = status
+    } else {
+      delete this.reqParams.status
+    }
+    if (channel_id !== undefined) {
+      this.reqParams.channel_id = channel_id
+    } else {
+      delete this.reqParams.channel_id
+    }
+    if (date) {
+      this.reqParams.begin_pubdate = date[0]
+        .startOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+      this.reqParams.end_pubdate = date[1]
+        .endOf('day')
+        .format('YYYY-MM-DD HH:mm:ss')
+    } else {
+      delete this.reqParams.begin_pubdate
+      delete this.reqParams.end_pubdate
+    }
+    // 如果查询操作，需要让页码值重新为1
+    this.reqParams.page = 1
+    console.log(this.reqParams)
+    // 发请求
+    this.getArticleList()
   }
 }

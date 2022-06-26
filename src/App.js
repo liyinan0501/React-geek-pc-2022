@@ -14,8 +14,8 @@ function App() {
         <Link to="home">Home</Link> */}
 
         {/* Routes */}
-        <Redirect exact from="/" to={'/home'}></Redirect>
         <Switch>
+          <Redirect exact from="/" to={'/home'}></Redirect>
           {/* <Route path="/home" component={Home}></Route> */}
           <AuthRoute path="/home" component={Home}></AuthRoute>
           <Route path="/login" component={Login}></Route>

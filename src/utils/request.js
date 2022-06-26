@@ -33,6 +33,11 @@ instance.interceptors.response.use(
   function (error) {
     // 对响应错误做点什么
     // 对token过期进行统一的处理
+    if (!error.response) {
+      // 如果error信息中没有response，网络超时导致。
+      message.error('It is busy, try later!')
+      return Promise.reject('It is busy, try later!')
+    }
     if (error.response.status === 401) {
       // 代表token过期了
       // 1. 删除token
