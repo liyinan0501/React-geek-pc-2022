@@ -21,6 +21,7 @@ const { Header, Content, Sider } = Layout
 export default class LayoutComponent extends Component {
   state = {
     profile: {},
+    selectedKey: this.props.location.pathname,
   }
   render() {
     return (
@@ -48,7 +49,9 @@ export default class LayoutComponent extends Component {
               <Menu
                 theme="dark"
                 mode="inline"
-                defaultSelectedKeys={this.props.location.pathname}
+                // 如果高亮不变，用defaultSelectKeys
+                // 如果高亮变，用selectedKeys
+                selectedKeys={[this.state.selectedKey]}
                 style={{
                   height: '100%',
                   borderRight: 0,
@@ -98,6 +101,18 @@ export default class LayoutComponent extends Component {
         </Layout>
       </div>
     )
+  }
+
+  componentDidUpdate(prevProps) {
+    let pathname = this.props.location.pathname
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      if (pathname.startsWith('/home/post')) {
+        pathname = '/home/post'
+      }
+      this.setState({
+        selectedKey: pathname,
+      })
+    }
   }
 
   async componentDidMount() {
