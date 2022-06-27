@@ -18,7 +18,7 @@ import 'react-quill/dist/quill.snow.css'
 import styles from './index.module.scss'
 import { PlusOutlined } from '@ant-design/icons'
 import { baseURL } from 'utils/request'
-import { addArticle, getArticleById } from 'api/article'
+import { addArticle, getArticleById, updateArticle } from 'api/article'
 
 export default class Post extends Component {
   state = {
@@ -162,6 +162,7 @@ export default class Post extends Component {
       })
       this.setState({
         fileList,
+        type: res.data.cover.type,
       })
     }
   }
@@ -210,14 +211,23 @@ export default class Post extends Component {
       return message.warn('The amount of upload pictures is not correct!')
     }
     const images = fileList.map((item) => item.url || item.response.data.url)
-    await addArticle(
-      {
-        ...values,
-        cover: { type, images },
-      },
-      draft
-    )
-    message.success('Post succeeds!')
+    if (this.state.id) {
+      await updateArticle(
+        { ...values, cover: { type, images }, id: this.state.id },
+        draft
+      )
+      message.success('Edit succeeds!')
+    } else {
+      await addArticle(
+        {
+          ...values,
+          cover: { type, images },
+        },
+        draft
+      )
+      message.success('Post succeeds!')
+    }
+
     this.props.history.push('/home/contentcontrol')
   }
 

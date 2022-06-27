@@ -28,6 +28,21 @@ export const addArticle = (data, draft = false) => {
   return request.post(`/mp/articles?draft=${draft}`, data)
 }
 
+/**
+ * get article by id
+ * @param {*} id
+ * @returns
+ */
 export const getArticleById = (id) => {
   return request.get(`/mp/articles/${id}`)
+}
+
+/**
+ * edit article by id
+ * @param {*} data
+ * @param {*} draft
+ * @returns
+ */
+export const updateArticle = (data, draft) => {
+  return request.put(`/mp/articles/${data.id}?draft=${draft}`, data)
 }
