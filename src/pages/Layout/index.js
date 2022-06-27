@@ -8,11 +8,16 @@ import {
   EditOutlined,
   LogoutOutlined,
 } from '@ant-design/icons'
-import Dashboard from 'pages/Dashboard'
-import ContentControl from 'pages/ContentControl'
-import Post from 'pages/Post'
+// import Dashboard from 'pages/Dashboard'
+// import ContentControl from 'pages/ContentControl'
+// import Post from 'pages/Post'
 import { removeToken } from 'utils/storage'
 import { getUserProfile } from 'api/user'
+
+const Dashboard = React.lazy(() => import('pages/Dashboard'))
+const ContentControl = React.lazy(() => import('pages/ContentControl'))
+const Post = React.lazy(() => import('pages/Post'))
+
 const { Header, Content, Sider } = Layout
 
 // css module need in css file using lowerCamelCase naming, do not use - dash sign
