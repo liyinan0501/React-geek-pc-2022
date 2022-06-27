@@ -34,7 +34,6 @@ export default class Post extends Component {
   }
   formRef = React.createRef()
   render() {
-    console.log(this.state.id)
     const { type, fileList, showPreview, previewUrl, id } = this.state
     return (
       <div className={styles.root}>
@@ -156,7 +155,14 @@ export default class Post extends Component {
   async componentDidMount() {
     if (this.state.id) {
       const res = await getArticleById(this.state.id)
-      console.log('res', res)
+      const values = { ...res.data, type: res.data.cover.type }
+      this.formRef.current.setFieldsValue(values)
+      const fileList = res.data.cover.images.map((item) => {
+        return { url: item }
+      })
+      this.setState({
+        fileList,
+      })
     }
   }
 
