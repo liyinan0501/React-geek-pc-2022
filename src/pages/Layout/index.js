@@ -79,8 +79,18 @@ export default class LayoutComponent extends Component {
                     path="/home/contentcontrol"
                     component={ContentControl}
                   ></Route>
-                  <Route exact path="/home/post" component={Post}></Route>
-                  <Route path="/home/post/:id" component={Post}></Route>
+                  <Route
+                    exact
+                    path="/home/post"
+                    component={Post}
+                    key="add"
+                    // 一旦key值发生变化，会销毁原来的post。
+                  ></Route>
+                  <Route
+                    path="/home/post/:id"
+                    component={Post}
+                    key="edit"
+                  ></Route>
                 </Switch>
               </Content>
             </Layout>
