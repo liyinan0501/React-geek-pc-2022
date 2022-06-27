@@ -79,7 +79,8 @@ export default class LayoutComponent extends Component {
                     path="/home/contentcontrol"
                     component={ContentControl}
                   ></Route>
-                  <Route path="/home/post" component={Post}></Route>
+                  <Route exact path="/home/post" component={Post}></Route>
+                  <Route path="/home/post/:id" component={Post}></Route>
                 </Switch>
               </Content>
             </Layout>

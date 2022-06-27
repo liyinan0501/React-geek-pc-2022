@@ -18,7 +18,7 @@ import 'react-quill/dist/quill.snow.css'
 import styles from './index.module.scss'
 import { PlusOutlined } from '@ant-design/icons'
 import { baseURL } from 'utils/request'
-import { addArticle } from 'api/article'
+import { addArticle, getArticleById } from 'api/article'
 
 export default class Post extends Component {
   state = {
@@ -30,10 +30,12 @@ export default class Post extends Component {
     ],
     showPreview: false,
     previewUrl: '',
+    id: this.props.match.params.id,
   }
   formRef = React.createRef()
   render() {
-    const { type, fileList, showPreview, previewUrl } = this.state
+    console.log(this.state.id)
+    const { type, fileList, showPreview, previewUrl, id } = this.state
     return (
       <div className={styles.root}>
         <Card
@@ -42,7 +44,7 @@ export default class Post extends Component {
               <Breadcrumb.Item>
                 <Link to="/home">Home</Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>Post</Breadcrumb.Item>
+              <Breadcrumb.Item>{id ? 'Editing' : 'Post'}</Breadcrumb.Item>
             </Breadcrumb>
           }
         >
@@ -122,7 +124,7 @@ export default class Post extends Component {
             <Form.Item wrapperCol={{ offset: 4 }}>
               <Space>
                 <Button type="primary" htmlType="submit" size="large">
-                  Post
+                  {id ? 'Edit' : 'post'}
                 </Button>
                 <Button size="large" onClick={this.addDraft}>
                   {' '}
@@ -150,6 +152,14 @@ export default class Post extends Component {
       </div>
     )
   }
+
+  async componentDidMount() {
+    if (this.state.id) {
+      const res = await getArticleById(this.state.id)
+      console.log('res', res)
+    }
+  }
+
   changeType = (e) => {
     this.setState({
       type: e.target.value,
@@ -209,9 +219,7 @@ export default class Post extends Component {
     this.save(values, false)
   }
   addDraft = async () => {
-    console.log('draft')
     const values = await this.formRef.current.validateFields()
-    console.log(values)
     this.save(values, true)
   }
 }

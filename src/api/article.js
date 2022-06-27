@@ -27,3 +27,7 @@ export const delArticle = (id) => {
 export const addArticle = (data, draft = false) => {
   return request.post(`/mp/articles?draft=${draft}`, data)
 }
+
+export const getArticleById = (id) => {
+  return request.get(`/mp/articles/${id}`)
+}

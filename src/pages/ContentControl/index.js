@@ -84,7 +84,12 @@ export default class ContentControl extends Component {
       render: (data) => {
         return (
           <Space>
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<EditOutlined />}
+              onClick={() => this.handleEdit(data.id)}
+            />
             <Button
               type="primary"
               shape="circle"
@@ -163,6 +168,10 @@ export default class ContentControl extends Component {
         </Card>
       </div>
     )
+  }
+
+  handleEdit = (id) => {
+    this.props.history.push(`/home/post/${id}`)
   }
 
   handleDelete = (id) => {
