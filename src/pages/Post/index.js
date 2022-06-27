@@ -18,6 +18,7 @@ import 'react-quill/dist/quill.snow.css'
 import styles from './index.module.scss'
 import { PlusOutlined } from '@ant-design/icons'
 import { baseURL } from 'utils/request'
+import { addArticle } from 'api/article'
 
 export default class Post extends Component {
   state = {
@@ -30,6 +31,7 @@ export default class Post extends Component {
     showPreview: false,
     previewUrl: '',
   }
+  formRef = React.createRef()
   render() {
     const { type, fileList, showPreview, previewUrl } = this.state
     return (
@@ -45,6 +47,7 @@ export default class Post extends Component {
           }
         >
           <Form
+            ref={this.formRef}
             labelCol={{ span: 4 }}
             size="large"
             onFinish={this.onFinish}
@@ -121,7 +124,10 @@ export default class Post extends Component {
                 <Button type="primary" htmlType="submit" size="large">
                   Post
                 </Button>
-                <Button size="large"> Save</Button>
+                <Button size="large" onClick={this.addDraft}>
+                  {' '}
+                  Save
+                </Button>
               </Space>
             </Form.Item>
           </Form>
@@ -173,15 +179,39 @@ export default class Post extends Component {
   beforeUpload = (file) => {
     if (file.size >= 1024 * 500) {
       message.warn('Uploaded image can not over 500kb')
-      return false
+      return Upload.LIST_IGNORE
     }
     if (!['image/jpeg', 'image/png'].includes(file.type)) {
       message.warn('Can only upload png and jpeg images')
-      return false
+      return Upload.LIST_IGNORE
     }
     return true
   }
-  onFinish = (values) => {
+
+  async save(values, draft) {
+    const { fileList, type } = this.state
+    if (fileList.length !== type) {
+      return message.warn('The amount of upload pictures is not correct!')
+    }
+    const images = fileList.map((item) => item.url || item.response.data.url)
+    await addArticle(
+      {
+        ...values,
+        cover: { type, images },
+      },
+      draft
+    )
+    message.success('Post succeeds!')
+    this.props.history.push('/home/contentcontrol')
+  }
+
+  onFinish = async (values) => {
+    this.save(values, false)
+  }
+  addDraft = async () => {
+    console.log('draft')
+    const values = await this.formRef.current.validateFields()
     console.log(values)
+    this.save(values, true)
   }
 }

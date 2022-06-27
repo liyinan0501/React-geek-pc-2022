@@ -18,3 +18,12 @@ export const getArticles = (params) => {
 export const delArticle = (id) => {
   return request.delete(`/mp/articles/${id}`)
 }
+/**
+ * post article
+ * @param {*} data
+ * @returns
+ */
+
+export const addArticle = (data, draft = false) => {
+  return request.post(`/mp/articles?draft=${draft}`, data)
+}
